@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AddDoctorModal } from "./Modals/AddDoctorModal";
+import { AddNurseModal } from "./Modals/AddNurseModal";
 
 export function VisitShow() {
   const jwt = localStorage.getItem("jwt");
@@ -44,6 +45,31 @@ export function VisitShow() {
       window.location.reload();
     });
   };
+  const handleAddNurse = (name, date, time, note) => {
+    const params = {
+      visit_id,
+      name,
+      date,
+      time,
+      note,
+    };
+    axios
+      .post("http://localhost:3000/nurses.json", params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteNurse = (id) => {
+    axios.delete(`http://localhost:3000/nurses/${id}.json`).then((response) => {
+      console.log(response.data);
+      window.location.reload();
+    });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
@@ -82,14 +108,18 @@ export function VisitShow() {
         {thisVisit.nurses && thisVisit.nurses.length > 0 ? (
           thisVisit.nurses.map((nurse) => (
             <div key={nurse.id}>
+              <button onClick={() => handleDeleteNurse(nurse.id)}>X</button>
               <p>{nurse.name}</p>
               <p>{nurse.date}</p>
               <p>{nurse.time}</p>
+              <p>{nurse.note}</p>
             </div>
           ))
         ) : (
           <p>You don&#39;t have any nurses added yet</p>
         )}
+        <button onClick={handleShowModal}>+ RN</button>
+        <AddNurseModal show={isModalVisible} onClose={handleCloseModal} onAddNurse={handleAddNurse} />
       </div>
       <div>
         <h2>My Meds:</h2>
