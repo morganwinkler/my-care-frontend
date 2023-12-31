@@ -1,7 +1,9 @@
+import { Signup } from "./Signup";
+
 export function Content() {
   return (
     <div>
-      <p>All Visits</p>
+      <Signup />
     </div>
   );
 }
