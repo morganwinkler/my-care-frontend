@@ -4,6 +4,7 @@ import { Signup } from "./Signup";
 import { useState, useEffect } from "react";
 import { Home } from "./Home";
 import { Routes, Route } from "react-router-dom";
+import { VisitShow } from "./VisitShow";
 
 export function Content() {
   const [visits, setVisits] = useState([]);
@@ -39,6 +40,7 @@ export function Content() {
   return (
     <Routes>
       <Route path="/" element={homePage} />
+      <Route path="/visits/:visit_id" element={<VisitShow />} />
     </Routes>
   );
 }
