@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AddDoctorModal } from "./Modals/AddDoctorModal";
 import { AddNurseModal } from "./Modals/AddNurseModal";
+import { AddProcedureModal } from "./Modals/AddProcedureModal";
 
 export function VisitShow() {
   const jwt = localStorage.getItem("jwt");
@@ -66,6 +67,33 @@ export function VisitShow() {
 
   const handleDeleteNurse = (id) => {
     axios.delete(`http://localhost:3000/nurses/${id}.json`).then((response) => {
+      console.log(response.data);
+      window.location.reload();
+    });
+  };
+
+  const handleAddProcedure = (name, date, reason, result, note) => {
+    const params = {
+      visit_id,
+      name,
+      date,
+      reason,
+      result,
+      note,
+    };
+    axios
+      .post("http://localhost:3000/procedures.json", params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteProcedure = (id) => {
+    axios.delete(`http://localhost:3000/procedures/${id}.json`).then((response) => {
       console.log(response.data);
       window.location.reload();
     });
@@ -138,12 +166,19 @@ export function VisitShow() {
         {thisVisit.procedures && thisVisit.procedures.length > 0 ? (
           thisVisit.procedures.map((procedure) => (
             <div key={procedure.id}>
-              <p>{procedure.name}</p>
+              <button onClick={() => handleDeleteProcedure(procedure.id)}>X</button>
+              <p>Procedure: {procedure.name}</p>
+              <p>Checking: {procedure.reason}</p>
+              <p>Date: {procedure.date}</p>
+              <p>Result: {procedure.result}</p>
+              <p>Note: {procedure.note}</p>
             </div>
           ))
         ) : (
           <p>You don&#39;t have any procedures added yet</p>
         )}
+        <button onClick={handleShowModal}>+ Procedure</button>
+        <AddProcedureModal show={isModalVisible} onClose={handleCloseModal} onAddProcedure={handleAddProcedure} />
       </div>
       <div>
         <h2>My Questions:</h2>
