@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { AddDoctorModal } from "./Modals/AddDoctorModal";
 
 export function VisitShow() {
   const jwt = localStorage.getItem("jwt");
@@ -9,6 +10,33 @@ export function VisitShow() {
   }
   const { visit_id } = useParams();
   const [thisVisit, setThisVisit] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleShowModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleAddDoctor = (name, specialty, note) => {
+    const params = {
+      visit_id,
+      name,
+      specialty,
+      note,
+    };
+    axios
+      .post("http://localhost:3000/doctors.json", params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
@@ -30,13 +58,16 @@ export function VisitShow() {
         {thisVisit.doctors && thisVisit.doctors.length > 0 ? (
           thisVisit.doctors.map((doctor) => (
             <div key={doctor.id}>
-              <p>{doctor.name}</p>
-              <p>{doctor.specialty}</p>
+              <p>Dr: {doctor.name}</p>
+              <p>Specialty: {doctor.specialty}</p>
+              <p>Note: {doctor.note}</p>
             </div>
           ))
         ) : (
           <p>You don&#39;t have any doctors added yet</p>
         )}
+        <button onClick={handleShowModal}>+ Doctor</button>
+        <AddDoctorModal show={isModalVisible} onClose={handleCloseModal} onAddDoctor={handleAddDoctor} />
       </div>
       <div>
         <h2>My RNs:</h2>
