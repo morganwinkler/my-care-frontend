@@ -38,6 +38,13 @@ export function VisitShow() {
       });
   };
 
+  const handleDeleteDoctor = (id) => {
+    axios.delete(`http://localhost:3000/doctors/${id}.json`).then((response) => {
+      console.log(response.data);
+      window.location.reload();
+    });
+  };
+
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
       setThisVisit(response.data);
@@ -58,6 +65,7 @@ export function VisitShow() {
         {thisVisit.doctors && thisVisit.doctors.length > 0 ? (
           thisVisit.doctors.map((doctor) => (
             <div key={doctor.id}>
+              <button onClick={() => handleDeleteDoctor(doctor.id)}>X</button>
               <p>Dr: {doctor.name}</p>
               <p>Specialty: {doctor.specialty}</p>
               <p>Note: {doctor.note}</p>
