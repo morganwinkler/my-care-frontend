@@ -180,6 +180,12 @@ export function VisitShow() {
       window.location.reload();
     });
   };
+  const handleDeleteVisit = (id) => {
+    axios.delete(`http://localhost:3000/visits/${id}.json`).then((response) => {
+      console.log(response.data);
+      window.location.href = "/";
+    });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
@@ -292,6 +298,7 @@ export function VisitShow() {
           onAddQuestion={handleAddQuestion}
         />
       </div>
+      <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
     </div>
   );
 }
