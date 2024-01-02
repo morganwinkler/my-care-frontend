@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AddDoctorModal } from "./Modals/AddDoctorModal";
 import { AddNurseModal } from "./Modals/AddNurseModal";
+import { AddMedModal } from "./Modals/AddMedModal";
 import { AddProcedureModal } from "./Modals/AddProcedureModal";
 
 export function VisitShow() {
@@ -14,6 +15,7 @@ export function VisitShow() {
   const [thisVisit, setThisVisit] = useState({});
   const [isDoctorModalVisible, setIsDoctorModalVisible] = useState(false);
   const [isNurseModalVisible, setIsNurseModalVisible] = useState(false);
+  const [isMedModalVisible, setIsMedModalVisible] = useState(false);
   const [isProcedureModalVisible, setIsProcedureModalVisible] = useState(false);
 
   const handleShowDoctorModal = () => {
@@ -29,6 +31,13 @@ export function VisitShow() {
 
   const handleCloseNurseModal = () => {
     setIsNurseModalVisible(false);
+  };
+  const handleShowMedModal = () => {
+    setIsMedModalVisible(true);
+  };
+
+  const handleCloseMedModal = () => {
+    setIsMedModalVisible(false);
   };
   const handleShowProcedureModal = () => {
     setIsProcedureModalVisible(true);
@@ -83,6 +92,30 @@ export function VisitShow() {
 
   const handleDeleteNurse = (id) => {
     axios.delete(`http://localhost:3000/nurses/${id}.json`).then((response) => {
+      console.log(response.data);
+      window.location.reload();
+    });
+  };
+  const handleAddMed = (name, reason, note) => {
+    const params = {
+      visit_id,
+      name,
+      reason,
+      note,
+    };
+    axios
+      .post("http://localhost:3000/medications.json", params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteMed = (id) => {
+    axios.delete(`http://localhost:3000/medications/${id}.json`).then((response) => {
       console.log(response.data);
       window.location.reload();
     });
@@ -170,12 +203,17 @@ export function VisitShow() {
         {thisVisit.medications && thisVisit.medications.length > 0 ? (
           thisVisit.medications.map((medication) => (
             <div key={medication.id}>
+              <button onClick={() => handleDeleteMed(medication.id)}>X</button>
               <p>{medication.name}</p>
+              <p>{medication.reason}</p>
+              <p>{medication.note}</p>
             </div>
           ))
         ) : (
           <p>You don&#39;t have any medications added yet</p>
         )}
+        <button onClick={handleShowMedModal}>+ Medication</button>
+        <AddMedModal show={isMedModalVisible} onClose={handleCloseMedModal} onAddMed={handleAddMed} />
       </div>
       <div>
         <h2>My Procedures:</h2>
