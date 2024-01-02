@@ -5,6 +5,7 @@ import { AddDoctorModal } from "./Modals/AddDoctorModal";
 import { AddNurseModal } from "./Modals/AddNurseModal";
 import { AddMedModal } from "./Modals/AddMedModal";
 import { AddProcedureModal } from "./Modals/AddProcedureModal";
+import { AddQuestionModal } from "./Modals/AddQuestionModal";
 
 export function VisitShow() {
   const jwt = localStorage.getItem("jwt");
@@ -17,6 +18,7 @@ export function VisitShow() {
   const [isNurseModalVisible, setIsNurseModalVisible] = useState(false);
   const [isMedModalVisible, setIsMedModalVisible] = useState(false);
   const [isProcedureModalVisible, setIsProcedureModalVisible] = useState(false);
+  const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
 
   const handleShowDoctorModal = () => {
     setIsDoctorModalVisible(true);
@@ -45,6 +47,13 @@ export function VisitShow() {
 
   const handleCloseProcedureModal = () => {
     setIsProcedureModalVisible(false);
+  };
+  const handleShowQuestionModal = () => {
+    setIsQuestionModalVisible(true);
+  };
+
+  const handleCloseQuestionModal = () => {
+    setIsQuestionModalVisible(false);
   };
 
   const handleAddDoctor = (name, specialty, note) => {
@@ -147,6 +156,30 @@ export function VisitShow() {
       window.location.reload();
     });
   };
+  const handleAddQuestion = (question, answer, note) => {
+    const params = {
+      visit_id,
+      question,
+      answer,
+      note,
+    };
+    axios
+      .post("http://localhost:3000/questions.json", params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteQuestion = (id) => {
+    axios.delete(`http://localhost:3000/questions/${id}.json`).then((response) => {
+      console.log(response.data);
+      window.location.reload();
+    });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
@@ -243,12 +276,21 @@ export function VisitShow() {
         {thisVisit.questions && thisVisit.questions.length > 0 ? (
           thisVisit.questions.map((question) => (
             <div key={question.id}>
-              <p>{question.question}</p>
+              <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
+              <p>Question: {question.question}</p>
+              <p>Answer: {question.answer}</p>
+              <p>Note: {question.note}</p>
             </div>
           ))
         ) : (
-          <p>You don&#39;t have any procedures added yet</p>
+          <p>You don&#39;t have any questions added yet</p>
         )}
+        <button onClick={handleShowQuestionModal}>+ Question</button>
+        <AddQuestionModal
+          show={isQuestionModalVisible}
+          onClose={handleCloseQuestionModal}
+          onAddQuestion={handleAddQuestion}
+        />
       </div>
     </div>
   );
