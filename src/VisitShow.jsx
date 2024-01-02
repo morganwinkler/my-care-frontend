@@ -12,14 +12,30 @@ export function VisitShow() {
   }
   const { visit_id } = useParams();
   const [thisVisit, setThisVisit] = useState({});
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDoctorModalVisible, setIsDoctorModalVisible] = useState(false);
+  const [isNurseModalVisible, setIsNurseModalVisible] = useState(false);
+  const [isProcedureModalVisible, setIsProcedureModalVisible] = useState(false);
 
-  const handleShowModal = () => {
-    setIsModalVisible(true);
+  const handleShowDoctorModal = () => {
+    setIsDoctorModalVisible(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
+  const handleCloseDoctorModal = () => {
+    setIsDoctorModalVisible(false);
+  };
+  const handleShowNurseModal = () => {
+    setIsNurseModalVisible(true);
+  };
+
+  const handleCloseNurseModal = () => {
+    setIsNurseModalVisible(false);
+  };
+  const handleShowProcedureModal = () => {
+    setIsProcedureModalVisible(true);
+  };
+
+  const handleCloseProcedureModal = () => {
+    setIsProcedureModalVisible(false);
   };
 
   const handleAddDoctor = (name, specialty, note) => {
@@ -128,8 +144,8 @@ export function VisitShow() {
         ) : (
           <p>You don&#39;t have any doctors added yet</p>
         )}
-        <button onClick={handleShowModal}>+ Doctor</button>
-        <AddDoctorModal show={isModalVisible} onClose={handleCloseModal} onAddDoctor={handleAddDoctor} />
+        <button onClick={handleShowDoctorModal}>+ Doctor</button>
+        <AddDoctorModal show={isDoctorModalVisible} onClose={handleCloseDoctorModal} onAddDoctor={handleAddDoctor} />
       </div>
       <div>
         <h2>My RNs:</h2>
@@ -146,8 +162,8 @@ export function VisitShow() {
         ) : (
           <p>You don&#39;t have any nurses added yet</p>
         )}
-        <button onClick={handleShowModal}>+ RN</button>
-        <AddNurseModal show={isModalVisible} onClose={handleCloseModal} onAddNurse={handleAddNurse} />
+        <button onClick={handleShowNurseModal}>+ RN</button>
+        <AddNurseModal show={isNurseModalVisible} onClose={handleCloseNurseModal} onAddNurse={handleAddNurse} />
       </div>
       <div>
         <h2>My Meds:</h2>
@@ -177,8 +193,12 @@ export function VisitShow() {
         ) : (
           <p>You don&#39;t have any procedures added yet</p>
         )}
-        <button onClick={handleShowModal}>+ Procedure</button>
-        <AddProcedureModal show={isModalVisible} onClose={handleCloseModal} onAddProcedure={handleAddProcedure} />
+        <button onClick={handleShowProcedureModal}>+ Procedure</button>
+        <AddProcedureModal
+          show={isProcedureModalVisible}
+          onClose={handleCloseProcedureModal}
+          onAddProcedure={handleAddProcedure}
+        />
       </div>
       <div>
         <h2>My Questions:</h2>
