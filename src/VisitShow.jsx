@@ -19,6 +19,13 @@ export function VisitShow() {
   const [isMedModalVisible, setIsMedModalVisible] = useState(false);
   const [isProcedureModalVisible, setIsProcedureModalVisible] = useState(false);
   const [isQuestionModalVisible, setIsQuestionModalVisible] = useState(false);
+  const [isEditVisit, setIsEditVisit] = useState(false);
+  const [editedVisit, setEditedVisit] = useState({
+    hospital: thisVisit.hospital,
+    reason: thisVisit.reason,
+    start_date: thisVisit.start_date,
+    end_date: "",
+  });
 
   const handleShowDoctorModal = () => {
     setIsDoctorModalVisible(true);
@@ -187,89 +194,151 @@ export function VisitShow() {
     });
   };
 
+  const handleEditVisitField = (field, value) => {
+    setEditedVisit((prevVisit) => ({
+      ...prevVisit,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdateVisit = (id) => {
+    const params = {
+      visit_id,
+      ...editedVisit,
+    };
+
+    axios
+      .patch(`http://localhost:3000/visits/${id}.json`, params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
       setThisVisit(response.data);
     });
   }, [visit_id]);
   return (
-    <div>
-      <div>
-        <h2>Hospital: {thisVisit.hospital}</h2>
-        <h2>Reason for Admission: {thisVisit.reason}</h2>
-      </div>
-      <div>
-        <h3>Admission Date: {thisVisit.start_date}</h3>
-        <h3>Discharge Date: {thisVisit.end_date}</h3>
-      </div>
-      <div>
-        <h2>My Doctors:</h2>
-        {thisVisit.doctors && thisVisit.doctors.length > 0 ? (
-          thisVisit.doctors.map((doctor) => (
-            <div key={doctor.id}>
-              <button onClick={() => handleDeleteDoctor(doctor.id)}>X</button>
-              <p>Dr: {doctor.name}</p>
-              <p>Specialty: {doctor.specialty}</p>
-              <p>Note: {doctor.note}</p>
-            </div>
-          ))
+    <div className="text-center">
+      <div className="card shadow-2xl" style={{ margin: "50px", padding: "50px" }}>
+        <button onClick={() => setIsEditVisit(!isEditVisit)}>{isEditVisit ? "Cancel Edit" : "?"}</button>
+        {isEditVisit ? (
+          <div key={thisVisit.id}>
+            <label> Date of Discharge: </label>
+            <input
+              type="date"
+              value={editedVisit.end_date}
+              onChange={(e) => handleEditVisitField("end_date", e.target.value)}
+            />
+
+            <button onClick={() => handleUpdateVisit(thisVisit.id)}>Save</button>
+          </div>
         ) : (
-          <p>You don&#39;t have any doctors added yet</p>
+          <div>
+            <h2>Hospital: {thisVisit.hospital}</h2>
+            <h2>Reason for Admission: {thisVisit.reason}</h2>
+            <h3>Admission Date: {thisVisit.start_date}</h3>
+            <h3>Discharge Date: {thisVisit.end_date}</h3>
+          </div>
         )}
+      </div>
+      <div className="card shadow-2xl" style={{ margin: "50px" }}>
+        <h2>My Doctors:</h2>
+        <div className="flex justify-center ">
+          {thisVisit.doctors && thisVisit.doctors.length > 0 ? (
+            thisVisit.doctors.map((doctor) => (
+              <div
+                key={doctor.id}
+                className="card shadow shadow-cyan-500/50"
+                style={{ margin: "10px", padding: "20px" }}
+              >
+                <button onClick={() => handleDeleteDoctor(doctor.id)}>X</button>
+                <p>Dr: {doctor.name}</p>
+                <p>Specialty: {doctor.specialty}</p>
+                <p>Note: {doctor.note}</p>
+              </div>
+            ))
+          ) : (
+            <p>You don&#39;t have any doctors added yet</p>
+          )}
+        </div>
         <button onClick={handleShowDoctorModal}>+ Doctor</button>
         <AddDoctorModal show={isDoctorModalVisible} onClose={handleCloseDoctorModal} onAddDoctor={handleAddDoctor} />
       </div>
-      <div>
+      <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My RNs:</h2>
-        {thisVisit.nurses && thisVisit.nurses.length > 0 ? (
-          thisVisit.nurses.map((nurse) => (
-            <div key={nurse.id}>
-              <button onClick={() => handleDeleteNurse(nurse.id)}>X</button>
-              <p>{nurse.name}</p>
-              <p>{nurse.date}</p>
-              <p>{nurse.time}</p>
-              <p>{nurse.note}</p>
-            </div>
-          ))
-        ) : (
-          <p>You don&#39;t have any nurses added yet</p>
-        )}
+        <div className="flex justify-center">
+          {thisVisit.nurses && thisVisit.nurses.length > 0 ? (
+            thisVisit.nurses.map((nurse) => (
+              <div
+                key={nurse.id}
+                className="card shadow shadow-cyan-500/50"
+                style={{ margin: "10px", padding: "20px" }}
+              >
+                <button onClick={() => handleDeleteNurse(nurse.id)}>X</button>
+                <p>Name: {nurse.name}</p>
+                <p>Date: {nurse.date}</p>
+                <p>Shift: {nurse.time}</p>
+                <p>Note: {nurse.note}</p>
+              </div>
+            ))
+          ) : (
+            <p>You don&#39;t have any nurses added yet</p>
+          )}
+        </div>
         <button onClick={handleShowNurseModal}>+ RN</button>
         <AddNurseModal show={isNurseModalVisible} onClose={handleCloseNurseModal} onAddNurse={handleAddNurse} />
       </div>
-      <div>
+      <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My Meds:</h2>
-        {thisVisit.medications && thisVisit.medications.length > 0 ? (
-          thisVisit.medications.map((medication) => (
-            <div key={medication.id}>
-              <button onClick={() => handleDeleteMed(medication.id)}>X</button>
-              <p>{medication.name}</p>
-              <p>{medication.reason}</p>
-              <p>{medication.note}</p>
-            </div>
-          ))
-        ) : (
-          <p>You don&#39;t have any medications added yet</p>
-        )}
+        <div className="flex justify-center">
+          {thisVisit.medications && thisVisit.medications.length > 0 ? (
+            thisVisit.medications.map((medication) => (
+              <div
+                key={medication.id}
+                className="card shadow shadow-cyan-500/50"
+                style={{ margin: "10px", padding: "20px" }}
+              >
+                <button onClick={() => handleDeleteMed(medication.id)}>X</button>
+                <p>Medication: {medication.name}</p>
+                <p>Reason for Rx: {medication.reason}</p>
+                <p>Note: {medication.note}</p>
+              </div>
+            ))
+          ) : (
+            <p>You don&#39;t have any medications added yet</p>
+          )}
+        </div>
         <button onClick={handleShowMedModal}>+ Medication</button>
         <AddMedModal show={isMedModalVisible} onClose={handleCloseMedModal} onAddMed={handleAddMed} />
       </div>
-      <div>
+      <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My Procedures:</h2>
-        {thisVisit.procedures && thisVisit.procedures.length > 0 ? (
-          thisVisit.procedures.map((procedure) => (
-            <div key={procedure.id}>
-              <button onClick={() => handleDeleteProcedure(procedure.id)}>X</button>
-              <p>Procedure: {procedure.name}</p>
-              <p>Checking: {procedure.reason}</p>
-              <p>Date: {procedure.date}</p>
-              <p>Result: {procedure.result}</p>
-              <p>Note: {procedure.note}</p>
-            </div>
-          ))
-        ) : (
-          <p>You don&#39;t have any procedures added yet</p>
-        )}
+        <div className="flex justify-center">
+          {thisVisit.procedures && thisVisit.procedures.length > 0 ? (
+            thisVisit.procedures.map((procedure) => (
+              <div
+                key={procedure.id}
+                className="card shadow shadow-cyan-500/50"
+                style={{ margin: "10px", padding: "20px" }}
+              >
+                <button onClick={() => handleDeleteProcedure(procedure.id)}>X</button>
+                <p>Procedure: {procedure.name}</p>
+                <p>Checking: {procedure.reason}</p>
+                <p>Date: {procedure.date}</p>
+                <p>Result: {procedure.result}</p>
+                <p>Note: {procedure.note}</p>
+              </div>
+            ))
+          ) : (
+            <p>You don&#39;t have any procedures added yet</p>
+          )}
+        </div>
         <button onClick={handleShowProcedureModal}>+ Procedure</button>
         <AddProcedureModal
           show={isProcedureModalVisible}
@@ -277,20 +346,26 @@ export function VisitShow() {
           onAddProcedure={handleAddProcedure}
         />
       </div>
-      <div>
+      <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My Questions:</h2>
-        {thisVisit.questions && thisVisit.questions.length > 0 ? (
-          thisVisit.questions.map((question) => (
-            <div key={question.id}>
-              <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
-              <p>Question: {question.question}</p>
-              <p>Answer: {question.answer}</p>
-              <p>Note: {question.note}</p>
-            </div>
-          ))
-        ) : (
-          <p>You don&#39;t have any questions added yet</p>
-        )}
+        <div className="flex justify-center">
+          {thisVisit.questions && thisVisit.questions.length > 0 ? (
+            thisVisit.questions.map((question) => (
+              <div
+                key={question.id}
+                className="card shadow shadow-cyan-500/50"
+                style={{ margin: "10px", padding: "20px" }}
+              >
+                <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
+                <p>Question: {question.question}</p>
+                <p>Answer: {question.answer}</p>
+                <p>Note: {question.note}</p>
+              </div>
+            ))
+          ) : (
+            <p>You don&#39;t have any questions added yet</p>
+          )}
+        </div>
         <button onClick={handleShowQuestionModal}>+ Question</button>
         <AddQuestionModal
           show={isQuestionModalVisible}
