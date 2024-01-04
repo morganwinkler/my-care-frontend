@@ -557,7 +557,13 @@ export function VisitShow() {
         </div>
       </div>
 
-      <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
+      <button
+        className="btn btn-error btn-lg"
+        style={{ margin: "15px" }}
+        onClick={() => handleDeleteVisit(thisVisit.id)}
+      >
+        Delete This Visit
+      </button>
     </div>
   );
 }
