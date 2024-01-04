@@ -28,6 +28,8 @@ export function VisitShow() {
   });
   const [editQuestionModes, setEditQuestionModes] = useState({});
   const [editedQuestions, setEditedQuestions] = useState({});
+  const [editProcedureModes, setEditProcedureModes] = useState({});
+  const [editedProcedures, setEditedProcedures] = useState({});
 
   const handleShowDoctorModal = () => {
     setIsDoctorModalVisible(true);
@@ -225,12 +227,27 @@ export function VisitShow() {
       [questionId]: !prevEditQuestionModes[questionId],
     }));
   };
+  const toggleEditProcedure = (procedureId) => {
+    setEditProcedureModes((prevEditProcedureModes) => ({
+      ...prevEditProcedureModes,
+      [procedureId]: !prevEditProcedureModes[procedureId],
+    }));
+  };
 
   const handleEditQuestionField = (questionId, field, value) => {
     setEditedQuestions((prevEditedQuestions) => ({
       ...prevEditedQuestions,
       [questionId]: {
         ...prevEditedQuestions[questionId],
+        [field]: value,
+      },
+    }));
+  };
+  const handleEditProcedureField = (procedureId, field, value) => {
+    setEditedProcedures((prevEditedProcedures) => ({
+      ...prevEditedProcedures,
+      [procedureId]: {
+        ...prevEditedProcedures[procedureId],
         [field]: value,
       },
     }));
@@ -243,6 +260,21 @@ export function VisitShow() {
 
     axios
       .patch(`http://localhost:3000/questions/${questionId}.json`, params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const handleUpdateProcedure = (procedureId) => {
+    const params = {
+      ...editedProcedures[procedureId],
+    };
+
+    axios
+      .patch(`http://localhost:3000/procedures/${procedureId}.json`, params)
       .then((response) => {
         console.log(response);
         window.location.reload();
@@ -354,89 +386,118 @@ export function VisitShow() {
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My Procedures:</h2>
-        <div className="flex justify-center">
-          {thisVisit.procedures && thisVisit.procedures.length > 0 ? (
-            thisVisit.procedures.map((procedure) => (
-              <div
-                key={procedure.id}
-                className="card shadow shadow-cyan-500/50"
-                style={{ margin: "10px", padding: "20px" }}
-              >
-                <button onClick={() => handleDeleteProcedure(procedure.id)}>X</button>
-                <p>Procedure: {procedure.name}</p>
-                <p>Checking: {procedure.reason}</p>
-                <p>Date: {procedure.date}</p>
-                <p>Result: {procedure.result}</p>
-                <p>Note: {procedure.note}</p>
-              </div>
-            ))
-          ) : (
-            <p>You don&#39;t have any procedures added yet</p>
-          )}
-        </div>
-        <button onClick={handleShowProcedureModal}>+ Procedure</button>
-        <AddProcedureModal
-          show={isProcedureModalVisible}
-          onClose={handleCloseProcedureModal}
-          onAddProcedure={handleAddProcedure}
-        />
-      </div>
-      <div className="card shadow-2xl" style={{ margin: "50px" }}>
-        <h2>My Questions:</h2>
         <div>
           <div className="flex justify-center">
-            {thisVisit.questions && thisVisit.questions.length > 0 ? (
-              thisVisit.questions.map((question) => (
+            {thisVisit.procedures && thisVisit.procedures.length > 0 ? (
+              thisVisit.procedures.map((procedure) => (
                 <div
-                  key={question.id}
+                  key={procedure.id}
                   className="card shadow shadow-cyan-500/50"
                   style={{ margin: "10px", padding: "20px" }}
                 >
                   <div className="flex flex-row justify-between">
-                    <button onClick={() => toggleEditQuestion(question.id)}>
-                      {editQuestionModes[question.id] ? "Cancel Edit" : "?"}
+                    <button onClick={() => toggleEditProcedure(procedure.id)}>
+                      {editProcedureModes[procedure.id] ? "Cancel Edit" : "?"}
                     </button>
-                    <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
+                    <button onClick={() => handleDeleteProcedure(procedure.id)}>X</button>
                   </div>
-                  {editQuestionModes[question.id] ? (
+                  {editProcedureModes[procedure.id] ? (
                     <>
-                      <label> Answer: </label>
+                      <label> Result: </label>
                       <input
                         type="text"
-                        value={editedQuestions[question.id]?.answer || ""}
-                        onChange={(e) => handleEditQuestionField(question.id, "answer", e.target.value)}
+                        value={editedProcedures[procedure.id]?.result || ""}
+                        onChange={(e) => handleEditProcedureField(procedure.id, "result", e.target.value)}
                       />
                       <label> Note: </label>
                       <input
                         type="text"
-                        value={editedQuestions[question.id]?.note || ""}
-                        onChange={(e) => handleEditQuestionField(question.id, "note", e.target.value)}
+                        value={editedProcedures[procedure.id]?.note || ""}
+                        onChange={(e) => handleEditProcedureField(procedure.id, "note", e.target.value)}
                       />
-                      <button onClick={() => handleUpdateQuestion(question.id)}>Save</button>
+                      <button onClick={() => handleUpdateProcedure(procedure.id)}>Save</button>
                     </>
                   ) : (
                     <>
-                      <div key={question.id} style={{ margin: "10px", padding: "20px" }}>
-                        <p>Question: {question.question}</p>
-                        <p>Answer: {question.answer}</p>
-                        <p>Note: {question.note}</p>
+                      <div key={procedure.id} style={{ margin: "10px", padding: "20px" }}>
+                        <p>Procedure: {procedure.name}</p>
+                        <p>Checking: {procedure.reason}</p>
+                        <p>Date: {procedure.date}</p>
+                        <p>Result: {procedure.result}</p>
+                        <p>Note: {procedure.note}</p>
                       </div>
                     </>
                   )}
                 </div>
               ))
             ) : (
-              <p>You don&#39;t have any questions added yet</p>
+              <p>You don&#39;t have any PROCEDURES added yet</p>
             )}
           </div>
-          <button onClick={handleShowQuestionModal}>+ Question</button>
-          <AddQuestionModal
-            show={isQuestionModalVisible}
-            onClose={handleCloseQuestionModal}
-            onAddQuestion={handleAddQuestion}
+          <button onClick={handleShowProcedureModal}>+ Procedure</button>
+          <AddProcedureModal
+            show={isProcedureModalVisible}
+            onClose={handleCloseProcedureModal}
+            onAddProcedure={handleAddProcedure}
           />
         </div>
-        <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
+        <div className="card shadow-2xl" style={{ margin: "50px" }}>
+          <h2>My Questions:</h2>
+          <div>
+            <div className="flex justify-center">
+              {thisVisit.questions && thisVisit.questions.length > 0 ? (
+                thisVisit.questions.map((question) => (
+                  <div
+                    key={question.id}
+                    className="card shadow shadow-cyan-500/50"
+                    style={{ margin: "10px", padding: "20px" }}
+                  >
+                    <div className="flex flex-row justify-between">
+                      <button onClick={() => toggleEditQuestion(question.id)}>
+                        {editQuestionModes[question.id] ? "Cancel Edit" : "?"}
+                      </button>
+                      <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
+                    </div>
+                    {editQuestionModes[question.id] ? (
+                      <>
+                        <label> Answer: </label>
+                        <input
+                          type="text"
+                          value={editedQuestions[question.id]?.answer || ""}
+                          onChange={(e) => handleEditQuestionField(question.id, "answer", e.target.value)}
+                        />
+                        <label> Note: </label>
+                        <input
+                          type="text"
+                          value={editedQuestions[question.id]?.note || ""}
+                          onChange={(e) => handleEditQuestionField(question.id, "note", e.target.value)}
+                        />
+                        <button onClick={() => handleUpdateQuestion(question.id)}>Save</button>
+                      </>
+                    ) : (
+                      <>
+                        <div key={question.id} style={{ margin: "10px", padding: "20px" }}>
+                          <p>Question: {question.question}</p>
+                          <p>Answer: {question.answer}</p>
+                          <p>Note: {question.note}</p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>You don&#39;t have any questions added yet</p>
+              )}
+            </div>
+            <button onClick={handleShowQuestionModal}>+ Question</button>
+            <AddQuestionModal
+              show={isQuestionModalVisible}
+              onClose={handleCloseQuestionModal}
+              onAddQuestion={handleAddQuestion}
+            />
+          </div>
+          <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
+        </div>
       </div>
     </div>
   );
