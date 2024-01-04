@@ -26,6 +26,8 @@ export function VisitShow() {
     start_date: thisVisit.start_date,
     end_date: "",
   });
+  const [editQuestionModes, setEditQuestionModes] = useState({});
+  const [editedQuestions, setEditedQuestions] = useState({});
 
   const handleShowDoctorModal = () => {
     setIsDoctorModalVisible(true);
@@ -217,12 +219,45 @@ export function VisitShow() {
         console.error(error);
       });
   };
+  const toggleEditQuestion = (questionId) => {
+    setEditQuestionModes((prevEditQuestionModes) => ({
+      ...prevEditQuestionModes,
+      [questionId]: !prevEditQuestionModes[questionId],
+    }));
+  };
+
+  const handleEditQuestionField = (questionId, field, value) => {
+    setEditedQuestions((prevEditedQuestions) => ({
+      ...prevEditedQuestions,
+      [questionId]: {
+        ...prevEditedQuestions[questionId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleUpdateQuestion = (questionId) => {
+    const params = {
+      ...editedQuestions[questionId],
+    };
+
+    axios
+      .patch(`http://localhost:3000/questions/${questionId}.json`, params)
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:3000/visits/${visit_id}.json`).then((response) => {
       setThisVisit(response.data);
     });
   }, [visit_id]);
+
   return (
     <div className="text-center">
       <div className="card shadow-2xl" style={{ margin: "50px", padding: "50px" }}>
@@ -348,32 +383,61 @@ export function VisitShow() {
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My Questions:</h2>
-        <div className="flex justify-center">
-          {thisVisit.questions && thisVisit.questions.length > 0 ? (
-            thisVisit.questions.map((question) => (
-              <div
-                key={question.id}
-                className="card shadow shadow-cyan-500/50"
-                style={{ margin: "10px", padding: "20px" }}
-              >
-                <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
-                <p>Question: {question.question}</p>
-                <p>Answer: {question.answer}</p>
-                <p>Note: {question.note}</p>
-              </div>
-            ))
-          ) : (
-            <p>You don&#39;t have any questions added yet</p>
-          )}
+        <div>
+          <div className="flex justify-center">
+            {thisVisit.questions && thisVisit.questions.length > 0 ? (
+              thisVisit.questions.map((question) => (
+                <div
+                  key={question.id}
+                  className="card shadow shadow-cyan-500/50"
+                  style={{ margin: "10px", padding: "20px" }}
+                >
+                  <div className="flex flex-row justify-between">
+                    <button onClick={() => toggleEditQuestion(question.id)}>
+                      {editQuestionModes[question.id] ? "Cancel Edit" : "?"}
+                    </button>
+                    <button onClick={() => handleDeleteQuestion(question.id)}>X</button>
+                  </div>
+                  {editQuestionModes[question.id] ? (
+                    <>
+                      <label> Answer: </label>
+                      <input
+                        type="text"
+                        value={editedQuestions[question.id]?.answer || ""}
+                        onChange={(e) => handleEditQuestionField(question.id, "answer", e.target.value)}
+                      />
+                      <label> Note: </label>
+                      <input
+                        type="text"
+                        value={editedQuestions[question.id]?.note || ""}
+                        onChange={(e) => handleEditQuestionField(question.id, "note", e.target.value)}
+                      />
+                      <button onClick={() => handleUpdateQuestion(question.id)}>Save</button>
+                    </>
+                  ) : (
+                    <>
+                      <div key={question.id} style={{ margin: "10px", padding: "20px" }}>
+                        <p>Question: {question.question}</p>
+                        <p>Answer: {question.answer}</p>
+                        <p>Note: {question.note}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p>You don&#39;t have any questions added yet</p>
+            )}
+          </div>
+          <button onClick={handleShowQuestionModal}>+ Question</button>
+          <AddQuestionModal
+            show={isQuestionModalVisible}
+            onClose={handleCloseQuestionModal}
+            onAddQuestion={handleAddQuestion}
+          />
         </div>
-        <button onClick={handleShowQuestionModal}>+ Question</button>
-        <AddQuestionModal
-          show={isQuestionModalVisible}
-          onClose={handleCloseQuestionModal}
-          onAddQuestion={handleAddQuestion}
-        />
+        <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
       </div>
-      <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
     </div>
   );
 }
