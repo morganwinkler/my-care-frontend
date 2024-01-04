@@ -19,7 +19,10 @@ export function Content() {
   let homePage;
   if (!userLoggedIn) {
     homePage = (
-      <div>
+      <div
+        className="flex row justify-center"
+        style={{ marginLeft: "150px", marginRight: "150px", marginTop: "50px", marginBottom: "150px" }}
+      >
         <Signup />
         <Login setUserLoggedIn={setUserLoggedIn} />
       </div>
