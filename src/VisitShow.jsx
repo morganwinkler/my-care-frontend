@@ -310,50 +310,64 @@ export function VisitShow() {
             <button onClick={() => handleUpdateVisit(thisVisit.id)}>Save</button>
           </div>
         ) : (
-          <div>
-            <h2>Hospital: {thisVisit.hospital}</h2>
-            <h2>Reason for Admission: {thisVisit.reason}</h2>
-            <h3>Admission Date: {thisVisit.start_date}</h3>
-            <h3>Discharge Date: {thisVisit.end_date}</h3>
+          <div className="flex justify-center">
+            <div className="prose">
+              <h1>Hospital: {thisVisit.hospital}</h1>
+              <h2>Reason for Admission: {thisVisit.reason}</h2>
+              <h4>Admission Date: {thisVisit.start_date}</h4>
+              <h4>Discharge Date: {thisVisit.end_date}</h4>
+            </div>
           </div>
         )}
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
-        <h2>My Doctors:</h2>
-        <div className="flex justify-center ">
-          {thisVisit.doctors && thisVisit.doctors.length > 0 ? (
-            thisVisit.doctors.map((doctor) => (
-              <div
-                key={doctor.id}
-                className="card shadow shadow-cyan-500/50"
-                style={{ margin: "10px", padding: "20px" }}
-              >
-                <div className="flex row justify-end">
-                  <button
-                    className="btn btn-circle btn-xs btn-outline btn-error"
-                    onClick={() => handleDeleteDoctor(doctor.id)}
-                  >
-                    X
-                  </button>
-                </div>
-                <p>Dr: {doctor.name}</p>
-                <p>Specialty: {doctor.specialty}</p>
-                <p>Note: {doctor.note}</p>
-              </div>
-            ))
-          ) : (
-            <p>You don&#39;t have any doctors added yet</p>
-          )}
+        <div className="flex justify-center">
+          <div className="prose">
+            <h2 style={{ padding: "15px" }}>My Doctors:</h2>
+          </div>
         </div>
         <div>
-          <button className="btn btn-active btn-accent" style={{ margin: "15px" }} onClick={handleShowDoctorModal}>
-            + Doctor
-          </button>
+          <div className="flex justify-center ">
+            {thisVisit.doctors && thisVisit.doctors.length > 0 ? (
+              thisVisit.doctors.map((doctor) => (
+                <div
+                  key={doctor.id}
+                  className="card shadow shadow-cyan-500/50"
+                  style={{ margin: "10px", padding: "20px" }}
+                >
+                  <div className="flex row justify-end">
+                    <button
+                      className="btn btn-circle btn-xs btn-outline btn-error"
+                      onClick={() => handleDeleteDoctor(doctor.id)}
+                    >
+                      X
+                    </button>
+                  </div>
+                  <div className="prose">
+                    <p>Dr: {doctor.name}</p>
+                    <p>Specialty: {doctor.specialty}</p>
+                    <p>Note: {doctor.note}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>You don&#39;t have any doctors added yet</p>
+            )}
+          </div>
+          <div>
+            <button className="btn btn-active btn-accent" style={{ margin: "15px" }} onClick={handleShowDoctorModal}>
+              + Doctor
+            </button>
+          </div>
+          <AddDoctorModal show={isDoctorModalVisible} onClose={handleCloseDoctorModal} onAddDoctor={handleAddDoctor} />
         </div>
-        <AddDoctorModal show={isDoctorModalVisible} onClose={handleCloseDoctorModal} onAddDoctor={handleAddDoctor} />
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
-        <h2>My RNs:</h2>
+        <div className="flex justify-center">
+          <div className="prose">
+            <h2 style={{ padding: "15px" }}>My RNs:</h2>
+          </div>
+        </div>
         <div className="flex justify-center">
           {thisVisit.nurses && thisVisit.nurses.length > 0 ? (
             thisVisit.nurses.map((nurse) => (
@@ -370,10 +384,12 @@ export function VisitShow() {
                     X
                   </button>
                 </div>
-                <p>Name: {nurse.name}</p>
-                <p>Date: {nurse.date}</p>
-                <p>Shift: {nurse.time}</p>
-                <p>Note: {nurse.note}</p>
+                <div className="prose">
+                  <p>Name: {nurse.name}</p>
+                  <p>Date: {nurse.date}</p>
+                  <p>Shift: {nurse.time}</p>
+                  <p>Note: {nurse.note}</p>
+                </div>
               </div>
             ))
           ) : (
@@ -388,7 +404,11 @@ export function VisitShow() {
         <AddNurseModal show={isNurseModalVisible} onClose={handleCloseNurseModal} onAddNurse={handleAddNurse} />
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
-        <h2>My Meds:</h2>
+        <div className="flex justify-center">
+          <div className="prose">
+            <h2 style={{ padding: "15px" }}>My Medications:</h2>
+          </div>
+        </div>
         <div className="flex justify-center">
           {thisVisit.medications && thisVisit.medications.length > 0 ? (
             thisVisit.medications.map((medication) => (
@@ -405,9 +425,11 @@ export function VisitShow() {
                     X
                   </button>
                 </div>
-                <p>Medication: {medication.name}</p>
-                <p>Reason for Rx: {medication.reason}</p>
-                <p>Note: {medication.note}</p>
+                <div className="prose">
+                  <p>Medication: {medication.name}</p>
+                  <p>Reason for Rx: {medication.reason}</p>
+                  <p>Note: {medication.note}</p>
+                </div>
               </div>
             ))
           ) : (
@@ -422,7 +444,11 @@ export function VisitShow() {
         </div>
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
-        <h2>My Procedures:</h2>
+        <div className="flex justify-center">
+          <div className="prose">
+            <h2 style={{ padding: "15px" }}>My Procedures:</h2>
+          </div>
+        </div>
         <div>
           <div className="flex justify-center">
             {thisVisit.procedures && thisVisit.procedures.length > 0 ? (
@@ -464,7 +490,7 @@ export function VisitShow() {
                     </>
                   ) : (
                     <>
-                      <div key={procedure.id} style={{ margin: "10px", padding: "20px" }}>
+                      <div key={procedure.id} className="prose" style={{ margin: "10px", padding: "20px" }}>
                         <p>Procedure: {procedure.name}</p>
                         <p>Checking: {procedure.reason}</p>
                         <p>Date: {procedure.date}</p>
@@ -492,7 +518,11 @@ export function VisitShow() {
         </div>
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
-        <h2>My Questions:</h2>
+        <div className="flex justify-center">
+          <div className="prose">
+            <h2 style={{ padding: "15px" }}>My Questions:</h2>
+          </div>
+        </div>
         <div>
           <div className="flex justify-center">
             {thisVisit.questions && thisVisit.questions.length > 0 ? (
@@ -531,7 +561,7 @@ export function VisitShow() {
                     </>
                   ) : (
                     <>
-                      <div key={question.id} style={{ margin: "10px", padding: "20px" }}>
+                      <div key={question.id} className="prose" style={{ margin: "10px", padding: "20px" }}>
                         <p>Question: {question.question}</p>
                         <p>Answer: {question.answer}</p>
                         <p>Note: {question.note}</p>
