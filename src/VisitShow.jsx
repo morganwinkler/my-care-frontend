@@ -293,7 +293,11 @@ export function VisitShow() {
   return (
     <div className="text-center">
       <div className="card shadow-2xl" style={{ margin: "50px", padding: "50px" }}>
-        <button onClick={() => setIsEditVisit(!isEditVisit)}>{isEditVisit ? "Cancel Edit" : "?"}</button>
+        <div className="flex row justify-end">
+          <button className="btn btn-info btn-sm btn-outline" onClick={() => setIsEditVisit(!isEditVisit)}>
+            {isEditVisit ? "Cancel Edit" : "Update"}
+          </button>
+        </div>
         {isEditVisit ? (
           <div key={thisVisit.id}>
             <label> Date of Discharge: </label>
@@ -417,8 +421,11 @@ export function VisitShow() {
                   style={{ margin: "10px", padding: "20px" }}
                 >
                   <div className="flex flex-row justify-between">
-                    <button onClick={() => toggleEditProcedure(procedure.id)}>
-                      {editProcedureModes[procedure.id] ? "Cancel Edit" : "?"}
+                    <button
+                      className="btn btn-info btn-sm btn-outline"
+                      onClick={() => toggleEditProcedure(procedure.id)}
+                    >
+                      {editProcedureModes[procedure.id] ? "Cancel Edit" : "Update"}
                     </button>
                     <button
                       className="btn btn-circle btn-xs btn-outline btn-error"
@@ -480,8 +487,8 @@ export function VisitShow() {
                   style={{ margin: "10px", padding: "20px" }}
                 >
                   <div className="flex flex-row justify-between">
-                    <button onClick={() => toggleEditQuestion(question.id)}>
-                      {editQuestionModes[question.id] ? "Cancel Edit" : "?"}
+                    <button className="btn btn-info btn-sm btn-outline" onClick={() => toggleEditQuestion(question.id)}>
+                      {editQuestionModes[question.id] ? "Cancel Edit" : "Update"}
                     </button>
                     <button
                       className="btn btn-circle btn-xs btn-outline btn-error"
