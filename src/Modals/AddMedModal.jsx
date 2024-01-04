@@ -23,18 +23,47 @@ export function AddMedModal(props) {
 
   if (props.show) {
     return (
-      <div className="modal-background container">
+      <div className="modal-background">
         <section className="modal-main">
-          <div className="modal-content">
-            <h2>Add New Medication</h2>
-            <label>Name:</label>
-            <input type="text" name="name" value={medData.name} onChange={handleChange} />
-            <label>Reason for Rx:</label>
-            <input type="text" name="reason" value={medData.reason} onChange={handleChange} />
-            <label>Note:</label>
-            <textarea name="note" value={medData.note} onChange={handleChange} />
-            <button onClick={handleAddMed}>Add Medication</button>
-            <button onClick={props.onClose}>Cancel</button>
+          <div className="flex justify-center">
+            <div className="prose">
+              <div className="modal-content">
+                <h2>Add New Medication</h2>
+                <div className="flex flex-col">
+                  <label>Name:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="input input-bordered input-accent"
+                    value={medData.name}
+                    onChange={handleChange}
+                  />
+                  <label>Reason for Rx:</label>
+                  <input
+                    type="text"
+                    name="reason"
+                    className="input input-bordered input-accent"
+                    value={medData.reason}
+                    onChange={handleChange}
+                  />
+                  <label>Note:</label>
+                  <textarea
+                    name="note"
+                    className="input input-bordered input-accent"
+                    value={medData.note}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="text-center" style={{ padding: "10px" }}>
+                  <button className="btn btn-outline btn-success" style={{ margin: "5px" }} onClick={handleAddMed}>
+                    Add Medication
+                  </button>
+                  <button className="btn btn-outline btn-error" onClick={props.onClose}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </div>
