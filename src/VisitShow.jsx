@@ -345,7 +345,11 @@ export function VisitShow() {
             <p>You don&#39;t have any doctors added yet</p>
           )}
         </div>
-        <button onClick={handleShowDoctorModal}>+ Doctor</button>
+        <div>
+          <button className="btn btn-active btn-accent" style={{ margin: "15px" }} onClick={handleShowDoctorModal}>
+            + Doctor
+          </button>
+        </div>
         <AddDoctorModal show={isDoctorModalVisible} onClose={handleCloseDoctorModal} onAddDoctor={handleAddDoctor} />
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
@@ -376,7 +380,11 @@ export function VisitShow() {
             <p>You don&#39;t have any nurses added yet</p>
           )}
         </div>
-        <button onClick={handleShowNurseModal}>+ RN</button>
+        <div>
+          <button onClick={handleShowNurseModal} className="btn btn-active btn-accent" style={{ margin: "15px" }}>
+            + RN
+          </button>
+        </div>
         <AddNurseModal show={isNurseModalVisible} onClose={handleCloseNurseModal} onAddNurse={handleAddNurse} />
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
@@ -406,8 +414,12 @@ export function VisitShow() {
             <p>You don&#39;t have any medications added yet</p>
           )}
         </div>
-        <button onClick={handleShowMedModal}>+ Medication</button>
-        <AddMedModal show={isMedModalVisible} onClose={handleCloseMedModal} onAddMed={handleAddMed} />
+        <div>
+          <button onClick={handleShowMedModal} className="btn btn-active btn-accent" style={{ margin: "15px" }}>
+            + Medication
+          </button>
+          <AddMedModal show={isMedModalVisible} onClose={handleCloseMedModal} onAddMed={handleAddMed} />
+        </div>
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
         <h2>My Procedures:</h2>
@@ -467,12 +479,16 @@ export function VisitShow() {
               <p>You don&#39;t have any PROCEDURES added yet</p>
             )}
           </div>
-          <button onClick={handleShowProcedureModal}>+ Procedure</button>
-          <AddProcedureModal
-            show={isProcedureModalVisible}
-            onClose={handleCloseProcedureModal}
-            onAddProcedure={handleAddProcedure}
-          />
+          <div>
+            <button onClick={handleShowProcedureModal} className="btn btn-active btn-accent" style={{ margin: "15px" }}>
+              + Procedure
+            </button>
+            <AddProcedureModal
+              show={isProcedureModalVisible}
+              onClose={handleCloseProcedureModal}
+              onAddProcedure={handleAddProcedure}
+            />
+          </div>
         </div>
       </div>
       <div className="card shadow-2xl" style={{ margin: "50px" }}>
@@ -528,15 +544,20 @@ export function VisitShow() {
               <p>You don&#39;t have any questions added yet</p>
             )}
           </div>
-          <button onClick={handleShowQuestionModal}>+ Question</button>
-          <AddQuestionModal
-            show={isQuestionModalVisible}
-            onClose={handleCloseQuestionModal}
-            onAddQuestion={handleAddQuestion}
-          />
+          <div>
+            <button onClick={handleShowQuestionModal} className="btn btn-active btn-accent" style={{ margin: "15px" }}>
+              + Question
+            </button>
+            <AddQuestionModal
+              show={isQuestionModalVisible}
+              onClose={handleCloseQuestionModal}
+              onAddQuestion={handleAddQuestion}
+            />
+          </div>
         </div>
-        <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
       </div>
+
+      <button onClick={() => handleDeleteVisit(thisVisit.id)}>Delete This Visit</button>
     </div>
   );
 }
