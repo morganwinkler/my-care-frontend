@@ -25,48 +25,52 @@ export function AddVisitModal(props) {
   if (props.show) {
     return (
       <div className="modal-background">
-        <section className="modal-box">
-          <div className="modal-content flex flex-col">
-            <h2 className="prose">Add New Visit</h2>
-            <label>Hospital:</label>
-            <input
-              type="text"
-              name="hospital"
-              value={visitData.hospital}
-              onChange={handleChange}
-              className="input input-bordered input-accent"
-            />
-            <label>Date of Admission:</label>
-            <input
-              type="date"
-              name="start_date"
-              value={visitData.start_date}
-              onChange={handleChange}
-              className="input input-bordered input-accent"
-            />
-            <label>Date of Discharge:</label>
-            <input
-              type="date"
-              name="end_date"
-              value={visitData.end_date}
-              onChange={handleChange}
-              className="input input-bordered input-accent"
-            />
-            <label>Reason for Admission:</label>
-            <input
-              type="text"
-              name="reason"
-              value={visitData.reason}
-              onChange={handleChange}
-              className="input input-bordered input-accent"
-            />
-            <div className="text-center" style={{ padding: "10px" }}>
-              <button className="btn btn-outline btn-success" onClick={handleAddVisit} style={{ margin: "5px" }}>
-                Add Visit
-              </button>
-              <button className="btn btn-outline btn-error" onClick={props.onClose}>
-                Cancel
-              </button>
+        <section className="modal-main">
+          <div className="flex justify-center">
+            <div className="prose">
+              <div className="modal-content flex flex-col">
+                <h2>Add New Visit</h2>
+                <label>Hospital:</label>
+                <input
+                  type="text"
+                  name="hospital"
+                  value={visitData.hospital}
+                  onChange={handleChange}
+                  className="input input-bordered input-accent"
+                />
+                <label>Date of Admission:</label>
+                <input
+                  type="date"
+                  name="start_date"
+                  value={visitData.start_date}
+                  onChange={handleChange}
+                  className="input input-bordered input-accent"
+                />
+                <label>Date of Discharge:</label>
+                <input
+                  type="date"
+                  name="end_date"
+                  value={visitData.end_date}
+                  onChange={handleChange}
+                  className="input input-bordered input-accent"
+                />
+                <label>Reason for Admission:</label>
+                <input
+                  type="text"
+                  name="reason"
+                  value={visitData.reason}
+                  onChange={handleChange}
+                  className="input input-bordered input-accent"
+                />
+                <div className="text-center" style={{ padding: "10px" }}>
+                  <button className="btn btn-outline btn-success" onClick={handleAddVisit} style={{ margin: "5px" }}>
+                    Add Visit
+                  </button>
+                  <button className="btn btn-outline btn-error" onClick={props.onClose}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
