@@ -3,6 +3,7 @@ import { useState } from "react";
 
 export function Signup() {
   const [errors, setErrors] = useState([]);
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -13,16 +14,26 @@ export function Signup() {
       .then((response) => {
         console.log(response.data);
         event.target.reset();
-        window.location.href = "/";
+        setSignupSuccess(true);
       })
       .catch((error) => {
         console.log(error.response.data.errors);
         setErrors(error.response.data.errors);
       });
+    setTimeout(() => {
+      setSignupSuccess(false);
+    }, 3000);
   };
 
   return (
     <div id="signup">
+      {signupSuccess && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Success!</strong>
+          <span className="block sm:inline"> New user created.</span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-3"></span>
+        </div>
+      )}
       <div
         className="card shadow-xl shadow-cyan-500/50"
         style={{ paddingTop: "50px", paddingLeft: "100px", paddingRight: "100px" }}
