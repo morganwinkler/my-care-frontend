@@ -261,8 +261,13 @@ export function VisitShow() {
     axios
       .patch(`http://localhost:3000/questions/${questionId}.json`, params)
       .then((response) => {
-        console.log(response);
-        window.location.reload();
+        setEditedQuestions((prevEditedQuestions) => ({
+          ...prevEditedQuestions,
+          [questionId]: response.data,
+        }));
+
+        // Optional: Toggle the edit mode back to false if needed
+        toggleEditQuestion(questionId);
       })
       .catch((error) => {
         console.error(error);
@@ -276,8 +281,11 @@ export function VisitShow() {
     axios
       .patch(`http://localhost:3000/procedures/${procedureId}.json`, params)
       .then((response) => {
-        console.log(response);
-        window.location.reload();
+        setEditedProcedures((prevEditedProcedure) => ({
+          ...prevEditedProcedure,
+          [procedureId]: response.data,
+        }));
+        toggleEditProcedure(procedureId);
       })
       .catch((error) => {
         console.error(error);
@@ -302,12 +310,16 @@ export function VisitShow() {
           <div key={thisVisit.id}>
             <label> Date of Discharge: </label>
             <input
+              className="input input-bordered input-accent"
+              style={{ margin: "10px" }}
               type="date"
               value={editedVisit.end_date}
               onChange={(e) => handleEditVisitField("end_date", e.target.value)}
             />
 
-            <button onClick={() => handleUpdateVisit(thisVisit.id)}>Save</button>
+            <button className="btn btn-accent" onClick={() => handleUpdateVisit(thisVisit.id)}>
+              Save
+            </button>
           </div>
         ) : (
           <div className="flex justify-center">
@@ -476,17 +488,27 @@ export function VisitShow() {
                     <>
                       <label> Result: </label>
                       <input
+                        className="input input-bordered input-accent"
+                        style={{ margin: "10px" }}
                         type="text"
                         value={editedProcedures[procedure.id]?.result || ""}
                         onChange={(e) => handleEditProcedureField(procedure.id, "result", e.target.value)}
                       />
                       <label> Note: </label>
                       <input
+                        className="input input-bordered input-accent"
+                        style={{ margin: "10px" }}
                         type="text"
                         value={editedProcedures[procedure.id]?.note || ""}
                         onChange={(e) => handleEditProcedureField(procedure.id, "note", e.target.value)}
                       />
-                      <button onClick={() => handleUpdateProcedure(procedure.id)}>Save</button>
+                      <button
+                        className="btn btn-accent"
+                        style={{ margin: "10px" }}
+                        onClick={() => handleUpdateProcedure(procedure.id)}
+                      >
+                        Save
+                      </button>
                     </>
                   ) : (
                     <>
@@ -494,8 +516,8 @@ export function VisitShow() {
                         <p>Procedure: {procedure.name}</p>
                         <p>Checking: {procedure.reason}</p>
                         <p>Date: {procedure.date}</p>
-                        <p>Result: {procedure.result}</p>
-                        <p>Note: {procedure.note}</p>
+                        <p>Result: {editedProcedures[procedure.id]?.result || procedure.result}</p>
+                        <p>Note: {editedProcedures[procedure.id]?.note || procedure.note}</p>
                       </div>
                     </>
                   )}
@@ -547,24 +569,34 @@ export function VisitShow() {
                     <>
                       <label> Answer: </label>
                       <input
+                        className="input input-bordered input-accent"
+                        style={{ margin: "10px" }}
                         type="text"
                         value={editedQuestions[question.id]?.answer || ""}
                         onChange={(e) => handleEditQuestionField(question.id, "answer", e.target.value)}
                       />
                       <label> Note: </label>
                       <input
+                        className="input input-bordered input-accent"
+                        style={{ margin: "10px" }}
                         type="text"
                         value={editedQuestions[question.id]?.note || ""}
                         onChange={(e) => handleEditQuestionField(question.id, "note", e.target.value)}
                       />
-                      <button onClick={() => handleUpdateQuestion(question.id)}>Save</button>
+                      <button
+                        className="btn btn-accent"
+                        style={{ margin: "10px" }}
+                        onClick={() => handleUpdateQuestion(question.id)}
+                      >
+                        Save
+                      </button>
                     </>
                   ) : (
                     <>
                       <div key={question.id} className="prose" style={{ margin: "10px", padding: "20px" }}>
-                        <p>Question: {question.question}</p>
-                        <p>Answer: {question.answer}</p>
-                        <p>Note: {question.note}</p>
+                        <p>Question: {editedQuestions[question.id]?.question || question.question}</p>
+                        <p>Answer: {editedQuestions[question.id]?.answer || question.answer}</p>
+                        <p>Note: {editedQuestions[question.id]?.note || question.note}</p>
                       </div>
                     </>
                   )}
