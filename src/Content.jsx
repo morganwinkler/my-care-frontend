@@ -50,7 +50,7 @@ export function Content() {
     <Routes>
       <Route path="/" element={homePage} />
       <Route path="/library" element={<Library onMoreInfo={handleMoreInfoClick} />} />
-      <Route path="/mylibrary" element={<MyLibrary />} />
+      <Route path="/mylibrary" element={<MyLibrary onMoreInfo={handleMoreInfoClick} />} />
       <Route path="/visits/:visit_id" element={<VisitShow />} />
     </Routes>
   );
