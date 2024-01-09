@@ -18,6 +18,12 @@ export function Header() {
         <nav className="navbar bg-base-300">
           <h2 className=" text-5xl">MyCare</h2>
           <div className="navbar-start"></div>
+          <div className="navbar-start hover:text-blue-600">
+            <Link to="/library">Learn Library</Link>
+          </div>
+          <div className="navbar-start hover:text-blue-600">
+            <Link to="/mylibrary">My Library</Link>
+          </div>
           <div className="navbar-end hover:text-blue-600">
             <Logout />
           </div>
@@ -31,6 +37,12 @@ export function Header() {
           </h2>
           <div className="navbar-start hover:text-blue-600">
             <Link to="/">Home</Link>
+          </div>
+          <div className="navbar-start hover:text-blue-600">
+            <Link to="/library">Learn Library</Link>
+          </div>
+          <div className="navbar-start hover:text-blue-600">
+            <Link to="/mylibrary">My Library</Link>
           </div>
           <div className="navbar-end hover:text-blue-600">
             <Logout />
