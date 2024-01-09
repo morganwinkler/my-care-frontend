@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export function Library(props) {
   const [data, setData] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [alertMessage, setAlertMessage] = useState(null);
 
   const handleKeywordChange = (event) => {
     setKeyword(event.target.value);
@@ -18,9 +19,11 @@ export function Library(props) {
         link: article.AccessibleVersion,
       })
       .then((response) => {
+        setAlertMessage("Article added to library!");
         console.log("Article added to library:", response.data);
       })
       .catch((error) => {
+        setAlertMessage("Error adding article to library!");
         console.error("Error adding article to library:", error);
       });
   };
@@ -40,8 +43,33 @@ export function Library(props) {
     fetchData();
   }, [keyword]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAlertMessage(null);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [alertMessage]);
+
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      {alertMessage && (
+        <div
+          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+          role="alert"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            padding: "0.75rem",
+            borderRadius: "0.25rem",
+            zIndex: 999,
+          }}
+        >
+          {alertMessage}
+        </div>
+      )}
       <div className="text-center" style={{ margin: "50px" }}>
         <label className="prose">
           <h2>What would you like to learn more about? Enter keyword to find articles:</h2>
@@ -68,7 +96,7 @@ export function Library(props) {
                 <figure>
                   <img src={resource.ImageUrl} alt={resource.ImageAlt} />
                 </figure>
-                <div className="card-actions">
+                <div className="card-actions justify-center">
                   <button onClick={() => props.onMoreInfo(resource.AccessibleVersion)} className="btn btn-accent">
                     More Information
                   </button>
