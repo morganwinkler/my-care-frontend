@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 export function Library() {
@@ -7,11 +8,10 @@ export function Library() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `https://health.gov/myhealthfinder/api/v3/topicsearch.json?lang=en&keyword=${keyword}`
         );
-        const result = await response.json();
-        setData(result.Result.Resources.Resource);
+        setData(response.data.Result.Resources.Resource);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -40,6 +40,7 @@ export function Library() {
               <h3>{resource.Title}</h3>
               <img src={resource.ImageUrl} alt={resource.ImageAlt} />
               <button onClick={() => handleMoreInfoClick(resource.AccessibleVersion)}>More Information</button>
+              <button>Add To My Library</button>
             </div>
           ))}
         </ul>
