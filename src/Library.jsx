@@ -11,21 +11,29 @@ export function Library(props) {
     setKeyword(event.target.value);
   };
 
-  const handleAddToLibrary = (article) => {
-    axios
-      .post("http://localhost:3000/articles.json", {
-        title: article.Title,
-        image_url: article.ImageUrl,
-        link: article.AccessibleVersion,
-      })
-      .then((response) => {
+  const handleAddToLibrary = async (article) => {
+    try {
+      const existingArticles = await axios.get("http://localhost:3000/articles.json");
+      const isArticleAlreadyAdded = existingArticles.data.some(
+        (existingArticle) => existingArticle.link === article.AccessibleVersion
+      );
+
+      if (isArticleAlreadyAdded) {
+        setAlertMessage("Article is already in your library!");
+      } else {
+        const response = await axios.post("http://localhost:3000/articles.json", {
+          title: article.Title,
+          image_url: article.ImageUrl,
+          link: article.AccessibleVersion,
+        });
+
         setAlertMessage("Article added to library!");
         console.log("Article added to library:", response.data);
-      })
-      .catch((error) => {
-        setAlertMessage("Error adding article to library!");
-        console.error("Error adding article to library:", error);
-      });
+      }
+    } catch (error) {
+      setAlertMessage("Error adding article to library!");
+      console.error("Error adding article to library:", error);
+    }
   };
 
   useEffect(() => {
@@ -55,7 +63,7 @@ export function Library(props) {
     <div style={{ position: "relative" }}>
       {alertMessage && (
         <div
-          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+          className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
           role="alert"
           style={{
             position: "fixed",
