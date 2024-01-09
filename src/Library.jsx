@@ -1,15 +1,13 @@
+/* eslint-disable react/prop-types */
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export function Library() {
+export function Library(props) {
   const [data, setData] = useState(null);
   const [keyword, setKeyword] = useState("");
 
   const handleKeywordChange = (event) => {
     setKeyword(event.target.value);
-  };
-  const handleMoreInfoClick = (url) => {
-    window.open(url, "_blank");
   };
 
   const handleAddToLibrary = (article) => {
@@ -54,7 +52,7 @@ export function Library() {
             <div key={resource.Id}>
               <h3>{resource.Title}</h3>
               <img src={resource.ImageUrl} alt={resource.ImageAlt} />
-              <button onClick={() => handleMoreInfoClick(resource.AccessibleVersion)}>More Information</button>
+              <button onClick={() => props.onMoreInfo(resource.AccessibleVersion)}>More Information</button>
               <button onClick={() => handleAddToLibrary(resource)}>Add To My Library</button>
             </div>
           ))}

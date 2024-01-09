@@ -6,6 +6,7 @@ import { Home } from "./Home";
 import { Routes, Route } from "react-router-dom";
 import { VisitShow } from "./VisitShow";
 import { Library } from "./Library";
+import { MyLibrary } from "./MyLibrary";
 
 export function Content() {
   const [visits, setVisits] = useState([]);
@@ -15,6 +16,10 @@ export function Content() {
     axios.get("http://localhost:3000/visits.json").then((response) => {
       setVisits(response.data);
     });
+  };
+
+  const handleMoreInfoClick = (url) => {
+    window.open(url, "_blank");
   };
 
   let homePage;
@@ -44,7 +49,8 @@ export function Content() {
   return (
     <Routes>
       <Route path="/" element={homePage} />
-      <Route path="/library" element={<Library />} />
+      <Route path="/library" element={<Library onMoreInfo={handleMoreInfoClick} />} />
+      <Route path="/mylibrary" element={<MyLibrary />} />
       <Route path="/visits/:visit_id" element={<VisitShow />} />
     </Routes>
   );
