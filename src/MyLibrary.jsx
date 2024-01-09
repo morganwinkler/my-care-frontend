@@ -11,6 +11,18 @@ export function MyLibrary(props) {
     });
   };
 
+  const handleRemoveClick = (id) => {
+    axios
+      .delete(`http://localhost:3000/articles/${id}.json`)
+      .then((response) => {
+        console.log(response.data);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+
   useEffect(handleIndexArticles, []);
 
   return (
@@ -20,6 +32,7 @@ export function MyLibrary(props) {
           <h2>{article.title}</h2>
           <img src={article.image_url} alt="" />
           <button onClick={() => props.onMoreInfo(article.link)}>More Information</button>
+          <button onClick={() => handleRemoveClick(article.id)}>Remove From Library</button>
         </div>
       ))}
     </div>
