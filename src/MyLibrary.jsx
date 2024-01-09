@@ -27,14 +27,18 @@ export function MyLibrary(props) {
 
   return (
     <div>
-      {articles.map((article) => (
-        <div key={article.id}>
-          <h2>{article.title}</h2>
-          <img src={article.image_url} alt="" />
-          <button onClick={() => props.onMoreInfo(article.link)}>More Information</button>
-          <button onClick={() => handleRemoveClick(article.id)}>Remove From Library</button>
-        </div>
-      ))}
+      {articles && articles.length > 0 ? (
+        articles.map((article) => (
+          <div key={article.id}>
+            <h2>{article.title}</h2>
+            <img src={article.image_url} alt="" />
+            <button onClick={() => props.onMoreInfo(article.link)}>More Information</button>
+            <button onClick={() => handleRemoveClick(article.id)}>Remove From Library</button>
+          </div>
+        ))
+      ) : (
+        <p>You dont have any articles yet! Head over to Learn Library to explore</p>
+      )}
     </div>
   );
 }
