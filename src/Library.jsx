@@ -42,21 +42,45 @@ export function Library(props) {
 
   return (
     <div>
-      <label>
-        What would you like to learn more about? Enter keyword to find articles:
-        <input type="text" value={keyword} onChange={handleKeywordChange} />
-      </label>
+      <div className="text-center" style={{ margin: "50px" }}>
+        <label className="prose">
+          <h2>What would you like to learn more about? Enter keyword to find articles:</h2>
+          <div>
+            <input
+              type="text"
+              value={keyword}
+              onChange={handleKeywordChange}
+              className="input input-bordered input-accent"
+            />
+          </div>
+        </label>
+      </div>
       {data && (
-        <ul>
+        <div className="flex flex-wrap row justify-around text-center">
           {data.map((resource) => (
-            <div key={resource.Id}>
-              <h3>{resource.Title}</h3>
-              <img src={resource.ImageUrl} alt={resource.ImageAlt} />
-              <button onClick={() => props.onMoreInfo(resource.AccessibleVersion)}>More Information</button>
-              <button onClick={() => handleAddToLibrary(resource)}>Add To My Library</button>
+            <div
+              key={resource.Id}
+              className="card w-96 bg-base-100 shadow-xl image-full"
+              style={{ marginTop: "20px", marginBottom: "20px" }}
+            >
+              <div className="card-body">
+                <h3 className="card-title">{resource.Title}</h3>
+                <figure>
+                  <img src={resource.ImageUrl} alt={resource.ImageAlt} />
+                </figure>
+                <div className="card-actions">
+                  <button onClick={() => props.onMoreInfo(resource.AccessibleVersion)} className="btn btn-accent">
+                    More Information
+                  </button>
+
+                  <button onClick={() => handleAddToLibrary(resource)} className="btn btn-accent">
+                    Add To My Library
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
