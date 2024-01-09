@@ -26,14 +26,28 @@ export function MyLibrary(props) {
   useEffect(handleIndexArticles, []);
 
   return (
-    <div>
+    <div className="flex flex-wrap row justify-around text-center">
       {articles && articles.length > 0 ? (
         articles.map((article) => (
-          <div key={article.id}>
-            <h2>{article.title}</h2>
-            <img src={article.image_url} alt="" />
-            <button onClick={() => props.onMoreInfo(article.link)}>More Information</button>
-            <button onClick={() => handleRemoveClick(article.id)}>Remove From Library</button>
+          <div
+            key={article.id}
+            className="card w-96 bg-base-100 shadow-xl image-full"
+            style={{ marginTop: "20px", marginBottom: "20px" }}
+          >
+            <div className="card-body">
+              <h2 className="card-title">{article.title}</h2>
+              <figure>
+                <img src={article.image_url} alt="" />
+              </figure>
+              <div className="card-actions justify-center">
+                <button onClick={() => props.onMoreInfo(article.link)} className="btn btn-accent">
+                  More Information
+                </button>
+                <button onClick={() => handleRemoveClick(article.id)} className="btn btn-accent">
+                  Remove From Library
+                </button>
+              </div>
+            </div>
           </div>
         ))
       ) : (
