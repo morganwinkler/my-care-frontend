@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Home } from "./Home";
 import { Routes, Route } from "react-router-dom";
 import { VisitShow } from "./VisitShow";
+import { Library } from "./Library";
 
 export function Content() {
   const [visits, setVisits] = useState([]);
@@ -43,6 +44,7 @@ export function Content() {
   return (
     <Routes>
       <Route path="/" element={homePage} />
+      <Route path="/library" element={<Library />} />
       <Route path="/visits/:visit_id" element={<VisitShow />} />
     </Routes>
   );
