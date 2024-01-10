@@ -61,7 +61,7 @@ export function Library(props) {
 
   return (
     <div style={{ position: "relative" }}>
-      {alertMessage && (
+      {alertMessage === "Article added to library!" ? (
         <div
           className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
           role="alert"
@@ -77,7 +77,23 @@ export function Library(props) {
         >
           {alertMessage}
         </div>
-      )}
+      ) : alertMessage === "Article is already in your library!" ? (
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          role="alert"
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            padding: "0.75rem",
+            borderRadius: "0.25rem",
+            zIndex: 999,
+          }}
+        >
+          {alertMessage}
+        </div>
+      ) : null}
       <div className="text-center" style={{ margin: "50px" }}>
         <label className="prose">
           <h2>What would you like to learn more about? Enter keyword to find articles:</h2>
