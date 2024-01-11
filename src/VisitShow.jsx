@@ -524,7 +524,7 @@ export function VisitShow() {
                 </div>
               ))
             ) : (
-              <p>You don&#39;t have any PROCEDURES added yet</p>
+              <p>You don&#39;t have any procedures added yet</p>
             )}
           </div>
           <div>
