@@ -46,14 +46,7 @@ export function AddVisitModal(props) {
                   onChange={handleChange}
                   className="input input-bordered input-accent"
                 />
-                <label>Date of Discharge:</label>
-                <input
-                  type="date"
-                  name="end_date"
-                  value={visitData.end_date}
-                  onChange={handleChange}
-                  className="input input-bordered input-accent"
-                />
+
                 <label>Reason for Admission:</label>
                 <input
                   type="text"

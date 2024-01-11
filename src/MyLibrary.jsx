@@ -32,7 +32,7 @@ export function MyLibrary(props) {
           <div
             key={article.id}
             className="card w-96 bg-base-100 shadow-xl image-full"
-            style={{ marginTop: "20px", marginBottom: "20px" }}
+            style={{ marginTop: "20px", marginBottom: "150px" }}
           >
             <div className="card-body">
               <h2 className="card-title">{article.title}</h2>
@@ -51,7 +51,9 @@ export function MyLibrary(props) {
           </div>
         ))
       ) : (
-        <p>You dont have any articles yet! Head over to Learn Library to explore</p>
+        <div style={{ margin: "100px", marginBottom: "560px" }}>
+          <p>You dont have any articles yet! Head over to Learn Library to explore</p>
+        </div>
       )}
     </div>
   );

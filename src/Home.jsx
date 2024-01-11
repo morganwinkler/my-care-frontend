@@ -41,7 +41,7 @@ export function Home(props) {
         </button>
         <AddVisitModal show={isVisitModalVisible} onClose={handleCloseVisitModal} onAddVisit={handleAddVisit} />
       </div>
-      <div className="grid-flow-row">
+      <div className="grid-flow-row" style={{ marginBottom: "350px" }}>
         <h2 className="text-center text-3xl underline font-bold" style={{ paddingBottom: "50px" }}>
           My Visits
         </h2>
@@ -66,7 +66,7 @@ export function Home(props) {
             </div>
           ))
         ) : (
-          <div style={{ margin: "50px", marginBottom: "365px" }}>
+          <div style={{ margin: "50px", marginBottom: "450px" }}>
             <div className="text-center">
               <h3>You don&#39;t have any visits yet! Click the + Visit button to get started</h3>
             </div>
