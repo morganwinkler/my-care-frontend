@@ -66,7 +66,11 @@ export function Home(props) {
             </div>
           ))
         ) : (
-          <p>You do not have any visits yet</p>
+          <div style={{ margin: "50px", marginBottom: "365px" }}>
+            <div className="text-center">
+              <h3>You don&#39;t have any visits yet! Click the + Visit button to get started</h3>
+            </div>
+          </div>
         )}
       </div>
     </div>
